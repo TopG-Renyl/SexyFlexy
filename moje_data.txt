@@ -1,0 +1,5 @@
+SLOVNÍK ANALOGIÍ (Kuchyně):
+- Source: Lednice. Odtud vypadávají suroviny (entity) do tvého modelu.
+- Queue: Fronta nebo pracovní deska. Tady věci čekají, než na ně přijde řada.
+- Processor: Sporák nebo kuchař. Tady se se surovinou něco děje (opracování).
+- Sink: Odpadkový koš nebo talíř hosta. Tady proces končí a věc mizí z modelu.
