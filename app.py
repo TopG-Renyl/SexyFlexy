@@ -26,13 +26,9 @@ def nacti_znalosti():
             return f.read()
     return "Data nenalezena."
 
-# Připravíme instrukce
+# PŘÍPRAVA INSTRUKCÍ
 data_z_txt = nacti_znalosti()
-instrukce = # PŘÍPRAVA INSTRUKCÍ
-data_z_txt = nacti_znalosti()
-instrukce = f"Jsi SexyFlexy, expert na simulační software FlexSim. Vysvětluj jako šéfkuchař přes kuchyni. TVÁ DATA: {data_z_txt}. Předpokládej, že všechny dotazy (např. crane, queue, procesy) se týkají FlexSimu.Teprve když je dotaz úplně mimo (např. recept na pizzu nebo počasí), řekni: 'Tohle není z FlexSimu.' Piš stručně, bez emoji."
-
-def posli_zpravu(text, historie):
+instrukce = f"Jsi SexyFlexy, expert na simulační software FlexSim. Vysvětluj jako šéfkuchař přes kuchyni. TVÁ DATA: {data_z_txt}. Předpokládej, že všechny dotazy (např. crane, queue, procesy) se týkají FlexSimu. Teprve když je dotaz úplně mimo (např. recept na pizzu nebo počasí), řekni: 'Tohle není z FlexSimu.' Piš stručně, bez emoji."
     """Sestaví payload a odešle dotaz na Google Gemini API."""
     messages = []
     
@@ -104,4 +100,5 @@ if uzivatel_text:
     st.session_state.historie.append({"role": "user", "parts": [{"text": uzivatel_text}]})
 
     st.session_state.historie.append({"role": "model", "parts": [{"text": odpoved}]})
+
 
