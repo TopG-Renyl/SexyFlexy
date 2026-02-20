@@ -4,7 +4,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-# Načtení klíče pro lokální testování
+# Načtení klíče pro lokální testování (na Streamlit Cloud to bere ze Secrets)
 load_dotenv()
 
 # Nastavení vzhledu stránky v prohlížeči
@@ -14,7 +14,7 @@ st.set_page_config(page_title="SexyFlexy", page_icon="🍳")
 API_KEY = os.getenv("GEMINI_API_KEY") 
 
 if not API_KEY:
-    st.error("Chyba: API klíč nebyl nalezen! Zkontroluj soubor .env.")
+    st.error("Chyba: API klíč nebyl nalezen! Zkontroluj nastavení Secrets na Streamlitu nebo soubor .env.")
     st.stop() # Zastaví vykreslování stránky
 
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
@@ -26,9 +26,11 @@ def nacti_znalosti():
             return f.read()
     return "Data nenalezena."
 
-# PŘÍPRAVA INSTRUKCÍ
+# --- PŘÍPRAVA INSTRUKCÍ ---
 data_z_txt = nacti_znalosti()
 instrukce = f"Jsi SexyFlexy, expert na simulační software FlexSim. Vysvětluj jako šéfkuchař přes kuchyni. TVÁ DATA: {data_z_txt}. Předpokládej, že všechny dotazy (např. crane, queue, procesy) se týkají FlexSimu. Teprve když je dotaz úplně mimo (např. recept na pizzu nebo počasí), řekni: 'Tohle není z FlexSimu.' Piš stručně, bez emoji."
+
+def posli_zpravu(text, historie):
     """Sestaví payload a odešle dotaz na Google Gemini API."""
     messages = []
     
@@ -79,7 +81,7 @@ for zprava in st.session_state.historie:
     with st.chat_message(vykreslovaci_role):
         st.markdown(zprava["parts"][0]["text"])
 
-# 3. Pole pro zadání textu: Tohle nahrazuje náš starý input()
+# 3. Pole pro zadání textu
 uzivatel_text = st.chat_input("Napiš svůj dotaz sem...")
 
 # 4. Co se stane, když uživatel odešle zprávu
@@ -89,16 +91,13 @@ if uzivatel_text:
         st.markdown(uzivatel_text)
     
     # B. Získáme odpověď od bota (předáme mu historii z paměti Streamlitu)
-    with st.spinner("SexyFlexy vaří odpověď..."): # Ukáže se hezké načítací kolečko
+    with st.spinner("SexyFlexy vaří odpověď..."):
         odpoved = posli_zpravu(uzivatel_text, st.session_state.historie)
         
     # C. Zobrazíme odpověď bota na webu
     with st.chat_message("assistant"):
         st.markdown(odpoved)
         
-    # D. Uložíme obě zprávy do paměti (ve formátu pro Google API), aby si je bot pamatoval do dalšího kola
+    # D. Uložíme obě zprávy do paměti
     st.session_state.historie.append({"role": "user", "parts": [{"text": uzivatel_text}]})
-
     st.session_state.historie.append({"role": "model", "parts": [{"text": odpoved}]})
-
-
