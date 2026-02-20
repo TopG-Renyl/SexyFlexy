@@ -1,0 +1,2 @@
+# SexyFlexy
+Pomocník s flexsimem
