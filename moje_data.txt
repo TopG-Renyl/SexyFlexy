@@ -1,5 +1,19 @@
-SLOVNÍK ANALOGIÍ (Kuchyně):
-- Source: Lednice. Odtud vypadávají suroviny (entity) do tvého modelu.
-- Queue: Fronta nebo pracovní deska. Tady věci čekají, než na ně přijde řada.
-- Processor: Sporák nebo kuchař. Tady se se surovinou něco děje (opracování).
-- Sink: Odpadkový koš nebo talíř hosta. Tady proces končí a věc mizí z modelu.
+OBJEKTY
+- Source: Počáteční bod simulace – místo, kde se položky (FlowItems) "rodí" a vstupují do tvého modelu
+- Queue: Místo, kde položky (FlowItems) čekají, než se pro ně uvolní místo v dalším kroku procesu
+- Processor: Nejlépe se dá popsat jako jakékoliv místo nebo zařízení v procesu, které přijme položku (FlowItem), stráví určitý čas její úpravou nebo zpracováním a poté ji pošle dál
+- Combiner: Objekt, který spojuje více položek dohromady
+	Aby Combiner správně fungoval, má jedno zásadní pravidlo pro zapojování (připojování přes "A"):
+		Vstupní port 1 (Input Port 1): Sem vždy přijíždí tzv. kontejner nebo hlavní díl. Může to být prázdná paleta, papírová krabice nebo třeba podvozek auta
+		Vstupní porty 2, 3, atd.: Sem přijíždějí položky, které se budou do kontejneru vkládat nebo montovat (např. zboží na paletu, bonbony do sáčku, kola na podvozek)
+- Separator: Separator má za úkol vzít jeden objekt a rozdělit ho na více částí
+	Dva hlavní režimy práce:
+		Unpack (Rozbalit/Vyložit): Tento režim se používá na rozebírání toho, co předtím vytvořil Combiner v režimu Pack. Separator vezme kontejner (např. paletu s krabicemi) a 		fyzicky z něj krabice vytáhne
+		Split (Rozříznout/Rozdělit): V tomto režimu Separator vezme jednu obyčejnou položku a "rozkopíruje" ji na zadaný počet kusů. Tohle je ideální pro simulaci řezání (dlouhá tyč 		se rozřeže na 5 menších), lisování (z jednoho kusu plechu vypadnou 4 součástky) nebo třeba štěpení buněk
+	Pravidlo pro výstupní porty:
+		Když používáš režim Unpack (Rozbalit), Separator automaticky posílá věci ven podle tohoto klíče:
+			Výstupní port 1 (Output Port 1): Sem vždy odejde samotný kontejner (např. prázdná paleta, která může jet zpátky na začátek linky)
+			Výstupní port 2 (Output Port 2): Sem odcházejí všechny vybalené věci (např. krabice, které jedou dál po pásu)
+- Sink: Je to místo, kde položky (FlowItems) natrvalo opouštějí tvůj simulační model
+	Když položka vstoupí do Sinku, je okamžitě zničena a vymazána ze simulace. 
+	To má jeden obrovský praktický důvod – pokud by se položky někde na konci modelu jen hromadily, počítači by velmi rychle došla paměť a celá simulace by se zasekla
